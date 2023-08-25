@@ -1,5 +1,0 @@
-"npm run build" Bundles the app into static files for production
-
-"npm test" Starts the test runner
-
-"npm start" starts the development server(?)
