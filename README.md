@@ -13,7 +13,7 @@ This tool helps to visualize the randomized map generated with the [Ocarina of T
 3. **Navigate to the [OoT_RandomizerMappingTool](url goes here)**, (hosted on Github Pages).
 4. Here you have two options:
     1. Upload your own spoiler file to map your seed! Click the Upload button, navigate to the directory where you saved your spoiler file, and **select your spoiler file**. 
-    2. Try the demo! Use a pre-generated spoiler to try out the tool and see how it works. **Click the "Try Demo" button** to generate the map. 
+    2. Try the demo! Use a pre-generated spoiler to try out the tool and see how it works. **Click the "Try Demo!" button** to generate the map. 
 <p>The program should then generate your map and open it in the central window of the webpage. You can use the tools on the left side of the page to search for and highlight a specific node in the graph, or use the path-finder tool to find and highlight any number of paths from one node to another.</p>
 
 # Other Notes
