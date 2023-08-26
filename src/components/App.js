@@ -1,11 +1,7 @@
-// import logo from './logo.svg';
 import '../assets/css/App.css';
 import React from 'react';
-import axios from 'axios';
 import TryDemo from './TryDemo';
-
 import { Upload } from "./Upload";
-// import ReactDOM from "react-dom";
 
 function App() {
   return (

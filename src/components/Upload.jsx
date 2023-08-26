@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-
+/**
+ * 
+ * @returns 
+ */
 export function Upload() {
   const [spoilerFile, setFile] = useState("");
 

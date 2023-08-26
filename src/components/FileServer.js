@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 export const FileServer = {
     sendFile: (file, callback) => {
       return new Promise((resolve, reject) => {
