@@ -6,7 +6,7 @@ This tool helps to visualize the randomized map generated with the [Ocarina of T
 
 # Usage Instructions
 1.  **Generate a seed** by navigating to the [Ocarina of Time Randomizer](https://ootrandomizer.com/) and selecting "Play Now". Adjust the randomization rules as desired then select "GENERATE SEED!" at the bottom of the page.
-2. On the following page, select your ROM (this will be a file with the .n64 extension). Scroll down and select "PATCH ROM!", but ***BE SURE to save the spoiler file before closing out of this window!***
+2. On the following page with the "ROM Generation" tab selected, click "BROWSE" to select your ROM (this will be a file with the .n64 extension). Scroll down and select "PATCH ROM!", but ***BE SURE to save the spoiler file before closing out of this window!***
 
 ![Screenshot](./src/assets/images/savespoilerlog.png)
 
