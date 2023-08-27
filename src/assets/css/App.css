@@ -1,11 +1,106 @@
-.FrontPage {
-  display: flex;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 2px solid;
+  border-color: #61dafb;
+  margin: 1px;
+
+  /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 1em;
+  overflow: auto; */
 }
 
-.FrontPageCommon {
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: small;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  background-color: lightcoral;
+  height: 400px;
+}
+
+.top-page-container {
+  display: flex;
+  background-color: lightgray;
+  justify-content: space-around;
+  height: 200px;
+}
+
+.center-page-container {
+  display: flex;
+  background-color: pink;
+  justify-content: space-around;
+  height: 400px;
+}
+
+.bottom-page-container {
+  display: flex;
+  background-color: purple;
+  justify-content: space-around;
+  height: 200px;
+}
+
+.instructions {
+  font-family: 'Courier New', Courier, monospace;
+
+}
+
+
+.map-tools {
+  font-family: 'Times New Roman', Times, serif;
+
+}
+
+.path-finder-container {
+  display: flex;
+}
+
+.map-container {
+  display: flex;
+  background-color: blanchedalmond;
+  justify-content: space-around;
+  flex-direction: column;
+
+}
+.map-details {
+  border: 2px solid;
+  border-color: #61dafb;
+}
+
+
+.map-header {
+  display: flex;
+  background-color: lawngreen;
+  justify-content: space-around;
+
+}
+
+.map-tools {
+  border: 2px solid;
+  border-color: #61dafb;
+}
+
+
+
+.item {
+  width: 100px;
+  height: 100px;
+  background: lightblue;
+  color: black;
+  margin: 10px;
+}
+
+/* 
+
+
+.common, .instructions, .primary-container, .map-container, .map-info{
+  display: flex;
   width: 20%;
   height: 20%;
   background-color: blanchedalmond;
@@ -13,18 +108,20 @@
   border: 2px solid;
   border-color: #61dafb;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
+  flex-direction: column; 
+  align-self: center; 
 }
 
-.PrimaryTools {
+
+.primary-container {
+  width: 98%;
+  overflow: auto;
   flex-direction: row;
   display: flex;
   padding: 5px;
 }
 
-.MapWindow {
+.map-container {
   width: 50%;
   max-width: 50%;
   height: 50%;
@@ -39,16 +136,22 @@
   align-self: center;
 }
 
-.SearchBar {
-  width: 30%;
-  flex-direction: column;
-  display: flex;
+.version, .seedHash {
+  height: 5%;
+  max-width: fit-content;
 }
 
 .Tools, .Info {
   flex-direction: column;
   flex: 0 0 20vw;
 }
+.SearchBar {
+  width: 30%;
+  flex-direction: column;
+  display: flex;
+}
+
+
 
 
 .App-logo {
@@ -84,4 +187,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
