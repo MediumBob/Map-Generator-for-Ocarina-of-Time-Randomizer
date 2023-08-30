@@ -237,7 +237,7 @@ function DetermineNodeProperties(nodeType){
  * @param {object} spoiler - the JSON data from the spoiler file
  * @returns a dictionary storing all the details that the Mapper will need to generate our graph
  */
-function Parser(spoiler){
+function Parse(spoiler){
     // init desired variables
     var regionIn, doorIn, regionOut, doorOut, currentNodeType, 
         nodesFrom = [], nodesTo = [], edgeLabels = [], singleNodeProperties = {}, allNodeProperties = {}
@@ -326,4 +326,4 @@ function Parser(spoiler){
     return graphDetails
 }
 
-export default Parser
+export { SimplifyNodeNames, GetNodeType, DetermineNodeProperties, Parse }

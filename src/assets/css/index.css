@@ -1,13 +1,147 @@
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  border: 2px solid;
+  border-color: #61dafb;
+  margin: 1px;
+
+  /* display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1em;
+  overflow: auto; */
 }
 
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: white;
+  background: #3e3e3e;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  /* background-color: lightcoral; */
+  height: 400px;
+  padding: 0 30px;
+}
+
+.top-page-container {
+  display: flex;
+  /* background-color: lightgray; */
+  justify-content: space-around;
+  height: 200px;
+}
+
+.center-page-container {
+  display: flex;
+  /* background-color: pink; */
+  justify-content: space-around;
+  height: 400px;
+}
+
+.bottom-page-container {
+  display: flex;
+  /* flex-direction: column; */
+  /* background-color: lightgoldenrodyellow; */
+  justify-content: space-evenly;
+  height: 200px;
+}
+
+/* .summary {
+
+} */
+
+.map-tools {
+  flex-basis: 20%;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: space-between;
+
+}
+
+.node-lookup-search-bar {
+  display: flex;
+  flex-direction: row;
+}
+
+.path-finder-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.path-finder-search-bars{
+  display: flex;
+  justify-content: space-between;
+}
+
+.path-finder-lower{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.number-of-paths-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-container {
+  display: flex;
+  flex-basis: 60%;
+  flex-grow: 5;
+   background-color: black; 
+
+  flex-direction: column;
+
+}
+.map-details {
+  display: flex;
+  flex-basis: 20%;
+  flex-grow: 1;
+}
+
+.map-header {
+  display: flex;
+  /* background-color: lawngreen; */
+  justify-content: space-around;
+
+}
+
+.map-tools {
+  border: 2px solid;
+  border-color: #61dafb;
+}
+
+
+a:link {
+  color: white;
+}
+
+a:visited {
+  color: lightskyblue;
+}
+
+/* a:hover {
+
+}
+
+a:active {
+
+} */
+
+.item {
+  width: 100px;
+  height: 100px;
+  background: lightblue;
+  color: black;
+  margin: 10px;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
+
