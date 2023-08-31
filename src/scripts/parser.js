@@ -238,8 +238,9 @@ function DetermineNodeProperties(nodeType){
  * @returns a dictionary storing all the details that the Mapper will need to generate our graph
  */
 function Parse(spoiler){
+    console.log("inside parse")
     // init desired variables
-    var regionIn, doorIn, regionOut, doorOut, currentNodeType, 
+    let regionIn, doorIn, regionOut, doorOut, currentNodeType, 
         nodesFrom = [], nodesTo = [], edgeLabels = [], singleNodeProperties = {}, allNodeProperties = {}
 
     //enumerate through each value of the spoiler json
@@ -251,11 +252,11 @@ function Parse(spoiler){
 
         // get the region you come from
         regionIn = split[0].trim()
-        //console.log("regionIn: " + regionIn) // debug output
+        console.log("regionIn: " + regionIn) // debug output
 
         // get the door you walk into
         doorIn = split[1].trim()
-        //console.log("doorIn: " + doorIn) // debug output
+        console.log("doorIn: " + doorIn) // debug output
 
         // if the VALUE in the KEY:VALUE pair from the spoiler entry is an object (dictionary), it's an overworld mapping
         if (typeof(value) === "object"){
@@ -306,11 +307,11 @@ function Parse(spoiler){
         singleNodeProperties = DetermineNodeProperties(nodeType)
         
         // store details for this entry
-        //console.log("adding " + regionIn + " to nodesFrom")
+        console.log("adding " + regionIn + " to nodesFrom")
         nodesFrom.push(regionIn)                                    // node from
-        //console.log("adding " + regionOut + " to nodesTo")
+        console.log("adding " + regionOut + " to nodesTo")
         nodesTo.push(regionOut)                                     // node to
-        //console.log("adding \n" + edgeLabel + "\nto edgeLabels")
+        console.log("adding \n" + edgeLabel + "\nto edgeLabels")
         edgeLabels.push(edgeLabel)                                  // edge label
         allNodeProperties[regionIn] = (singleNodeProperties)        // node properties
         console.log(Object.entries(allNodeProperties))

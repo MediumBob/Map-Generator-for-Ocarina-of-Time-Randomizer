@@ -11,30 +11,39 @@
 </head>
 
 <body>
-  <div class='page-container'>
-    <!-- Top of page - instructions -->
-    <section class="top-page-container">
-      <header class="summary">
-        <h1>Instructions</h1>
-        <ul>
-          <li><b>If you would like to map your own seed, click the "Upload Spoiler" button below</b>.</li>
-          <li>If you're just here to see how the tool works, click the "Try Demo!" button below to use the <a
-              href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/demo-spoiler.json">demo spoiler</a>.</li>
-        </ul>
-      </header>
+  <div class='primary-container'>
+    <header id="header">
+      <h1>Ocarina of Time Randomizer v7.1 Mapping Tool</h1>
+      <h3>Mapper by MediumBob</h3>
+      <hr>
+    </header>
+
+    <section id="summary">
+      <p>This tool assists in navigation of the randomized map generated with the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer v7.1 (by TestRunner et. al.)</a> by visualizing the map and providing tools to search for regions and find paths between them.</p>
+      <ul>
+        <li><b>If you would like to map your own seed, you'll need to upload the seed's spoiler file. click the "Browse" button below to upload.</b></li>
+        <form>
+          <input type="file" id="spoilerUpload" accept="text/json"/>
+        </form> 
+        <br>
+        <li>If you would just like to see how the tool works, click the "Try Demo!" button below to use the <a
+            href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/demo-spoiler.json">demo spoiler</a>.</li>
+            <button id="loadDemoSpoiler">Try Demo!</button>
+      </ul>
+      <hr>
     </section>
-    <!-- Middle of page - map and search tools -->
-    <section class='center-page-container'>
-      <!-- Map tools window - search bar and path lookup -->
+
+    <section class='central-container'>
       <aside class="map-tools">
-        <h1>Search for a location</h1>
+        <h2>Search for a location</h2>
         <div class='node-lookup-search-bar'>
           <p>Search: </p>
           <input type="text" placeholder="Select a node" name="Search">
           <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
         </div>
+        <hr>
         <div class='path-finder-container'>
-          <h1>Find path(s) between nodes</h1>
+          <h2>Find path(s) between nodes</h2>
           <div class='path-finder-search-bars'>
             <p>Node From: </p>
             <input type="text" placeholder="Select a node" name="Node from">
@@ -60,43 +69,57 @@
               <button>clear</button>
             </div>
           </div>
+          <hr>
         </div>
       </aside>
       <!-- Map window - version, seed hash, and primary map window -->
       <section class='map-container'>
         <div class='map-header'>
-          <div class='version'>
-            <h1>version</h1>
+          <div id='version'>
+            <h1>version:</h1>
           </div>
-          <div class='seed-hash'>
-            <h1>seed hash</h1>
+          <div id='seed-hash'>
+            <h1>seed hash:</h1>
           </div>
         </div>
-        <div>
-          <form>
-            <input type="file" id="spoilerUpload" accept="text/json"/>
-          </form> 
+        <div id="map-window">
           <!-- <button onclick="UploadSpoiler()" id="spoilerUpload">Upload Spoiler</button> -->
-          <button id="loadDemoSpoiler">Try Demo!</button>
-          <button onclick="Test()">Test</button>
+          <p>No spoiler selected - nothing to graph!</p>
         </div>
       </section>
-      <!-- Map details window - contents update when clicking on nodes/edges of map -->
       <aside class="map-details">
         <h1>This is where the node details go</h1>
       </aside>
+      <!-- Map details window - contents update when clicking on nodes/edges of map -->
     </section>
     <!-- Bottom of page -->
-    <section class='bottom-page-container'>
-      <h1>dummy section</h1>
-      <div id="output">text output goes here maybe? like loading errors or w/e</div>
+    <section id='instructions'>
+      <hr>
+      <h1>How to use this tool:</h1>
+      <ol>
+        <li>You will need a randomized seed to use this tool. <b>Generate a seed</b> by navigating to the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer Web Generator</a> (by dragonbane0 & TreZc0_) and selecting "Play Now". Adjust the randomization rules as desired, then select "GENERATE SEED!" at the bottom of the page.</li>
+        <br>
+        <li>On the following page after the tool has finished generating your seed, ensure that the "ROM Generation" tab is selected and then click "BROWSE" to select your base ROM (this will be a file with the .n64 extension). Scroll down and select "PATCH ROM!".</li>
+        <br>
+        <li>Below the "PATCH ROM!" button will be two other options: "Save unmodified Patch File", and "Save Spoiler Log File".</li>
+        <p><b><i>BE SURE to click "Save Spoler Log File" to download the spoiler BEFORE closing out of this window!</i></b></p>
+        <img src="./assets/images/save-spoiler-log.png" alt="How to save spoiler file" style="width:60%;height:45%">
+        <br>
+        <p>Once you have saved your spoiler file and patched your ROM, you may close out of the randomizer window.</p>
+        <li><b>click the "Browse..." button <a rel="noopener" target="_blank" href="#summary">at the top of this page</a></b> to upload the spoiler file (this will be a file with the .json extension).</li>
+        <p>This tool should then generate your map and open it in the central window of this webpage. You can use the tools on the left side of this page to search for a region and highlight that node in the graph, or use the path finder to highlight paths from one node to another.</p>
+      </ol>
     </section>
-  </div>
+    <section id="other-notes">
+      <h2>Other Notes</h2>
+      <p><b>Spoilers generated with Ocarina of Time Randomizer versions prior to 7.1 are not guarenteed to work</b>. The developers have changed (and may continue to change) the naming conventions for the spoiler information, and the current parser does not include region names from older version of the OoT Randomizer.</p>
+    </section>
+    </div>
 
   <script src="./scripts/test.js"></script>
-  <script src="./scripts/try-demo.js"></script>
-  <script src="./scripts/upload-spoiler.js"></script>
+  <script type="module" src="./scripts/try-demo.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> <!-- for spoiler upload - works with the form/input implementation, not the button -->
+  <script src="./scripts/upload-spoiler.js"></script>
 </body>
 
 </html>
