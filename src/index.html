@@ -12,14 +12,26 @@
 
 <body>
   <div class='primary-container'>
-    <header id="header">
-      <h1>Ocarina of Time Randomizer v7.1 Mapping Tool</h1>
-      <h3>Mapper by MediumBob</h3>
-      <hr>
+    <header class="header">
+      <div class="container">
+        <div class="title">
+          <h1 id="title">Ocarina of Time Randomizer v7.1 Mapping Tool</h1>
+          <h3 id="mapper-by-mb">Mapper by MediumBob</h3>
+        </div>
+        <ul class="links">
+          <li>
+            <a href="#">Github</a>
+          </li>
+          <li>
+            <a href="#">OoT Rando</a>
+          </li>
+        </ul>
+      </div>
     </header>
+    <hr>
 
     <section id="summary">
-      <p>This tool assists in navigation of the randomized map generated with the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer v7.1 (by TestRunner et. al.)</a> by visualizing the map and providing tools to search for regions and find paths between them.</p>
+      <p>This tool assists in navigation of the randomized map generated with the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer v7.1 (by TestRunner et. al.)</a> by generating a network graph that the user can interact with.</p>
       <ul>
         <li><b>If you would like to map your own seed, you'll need to upload the seed's spoiler file. click the "Browse" button below to upload.</b></li>
         <form>
@@ -97,17 +109,31 @@
       <hr>
       <h1>How to use this tool:</h1>
       <ol>
-        <li>You will need a randomized seed to use this tool. <b>Generate a seed</b> by navigating to the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer Web Generator</a> (by dragonbane0 & TreZc0_) and selecting "Play Now". Adjust the randomization rules as desired, then select "GENERATE SEED!" at the bottom of the page.</li>
-        <br>
-        <li>On the following page after the tool has finished generating your seed, ensure that the "ROM Generation" tab is selected and then click "BROWSE" to select your base ROM (this will be a file with the .n64 extension). Scroll down and select "PATCH ROM!".</li>
-        <br>
-        <li>Below the "PATCH ROM!" button will be two other options: "Save unmodified Patch File", and "Save Spoiler Log File".</li>
-        <p><b><i>BE SURE to click "Save Spoler Log File" to download the spoiler BEFORE closing out of this window!</i></b></p>
-        <img src="./assets/images/save-spoiler-log.png" alt="How to save spoiler file" style="width:60%;height:45%">
-        <br>
-        <p>Once you have saved your spoiler file and patched your ROM, you may close out of the randomizer window.</p>
-        <li><b>click the "Browse..." button <a rel="noopener" target="_blank" href="#summary">at the top of this page</a></b> to upload the spoiler file (this will be a file with the .json extension).</li>
-        <p>This tool should then generate your map and open it in the central window of this webpage. You can use the tools on the left side of this page to search for a region and highlight that node in the graph, or use the path finder to highlight paths from one node to another.</p>
+        <li><b>Generate a seed.</b></li>
+        <ol type="i">
+          <li>Navigate to the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer Web Generator</a> (by dragonbane0 & TreZc0_) and select "Play Now". Adjust the randomization rules as desired, then select "GENERATE SEED!" at the bottom of the page.</li>
+          <br>
+          <li>On the following page after the tool has finished generating your seed, click "BROWSE" to select your base ROM (file with .n64 extension), then scroll down and select "PATCH ROM!".</li>
+          <br>
+          <li>Below the "PATCH ROM!" button will be two other options: "Save unmodified Patch File", and "Save Spoiler Log File".</li>
+          <p><b><i>BE SURE to click "Save Spoler Log File" to download the spoiler BEFORE closing out of this window!</i></b></p>
+          <img src="./assets/images/save-spoiler-log.png" alt="How to save spoiler file" style="width:60%;height:45%">
+          <br>
+          <p>Once you have saved your spoiler file and patched your ROM, you may close out of the randomizer window.</p>
+        </ol>
+        <li><b>Upload your seed.</b></li>
+        <ol type="i">
+          <li><b>Click the "Browse..." button <a rel="noopener" target="_blank" href="#summary">at the top of this page</a></b> to upload the spoiler for your seed (file with .json extension).</li>
+          <p>This tool should then generate your map and open it in the central window of the webpage.</p>
+        </ol>
+        <li><b>Navigate your seed.</b></li>
+        <ol type="i">
+          <li>Use the <b>search bar</b> to highlight a region in your graph.</li>
+          <br>
+          <li>Use the <b>path finder</b> to highlight paths from one region to another.</li>
+          <br>
+          <li>Click on a node to display the <b>node details</b> in the panel on the right.</li>
+        </ol>
       </ol>
     </section>
     <section id="other-notes">

@@ -6,9 +6,8 @@
  * @returns the simplified regionIn name, as well as the updated doorIn (which will only change for owl flights and LW bridge nodes)
  */
 function SimplifyNodeNames(regionIn, doorIn){
-    // adjust doorIn for owl flights (must do this first, or else we lose this information)
-    if (regionIn.includes("Owl Flight")){
-        doorIn = regionIn // we need this line to correctly identify owl flights later on, due to how the spoiler documents them
+    if (regionIn.includes("Owl Flight")){ // we need this clause to correctly identify owl flights later on due to how the spoiler documents them. If we don't do this here, we lose this information (because we're simplifying regionIn)
+        doorIn = regionIn 
         // console.log("set doorIn to " + doorIn)
     }
     
@@ -132,7 +131,7 @@ function GetNodeType(regionIn, doorIn, regionOut, currentNodeType){
     else if (regionIn.includes("Warp") && regionIn !== "GC Woods Warp" && regionIn !== "Graveyard Warp Pad Region"){
         nodeType = "song"
     }
-    else if (doorIn.includes("Owl Flight")){ // this is why we needed to update doorIn at the top of SimplifyNodeNames - we simplified regionIn already at this point
+    else if (doorIn.includes("Owl Flight")){ // this is why we needed to update doorIn at the top of SimplifyNodeNames - we simplified regionIn already at this point, so we wouldn't know that it's an owl flight without updating doorIn
         nodeType = "owl flight"
     }
     else if (doorIn.includes("Lobby") || doorIn.includes("Beginning") || doorIn.includes("Well") || (doorIn.includes("Temple") && !doorIn.includes("Time"))){
@@ -243,8 +242,8 @@ function Parse(spoiler){
     let regionIn, doorIn, regionOut, doorOut, currentNodeType, 
         nodesFrom = [], nodesTo = [], edgeLabels = [], singleNodeProperties = {}, allNodeProperties = {}
 
-    //enumerate through each value of the spoiler json
-    for (const [key, value] of Object.entries(spoiler)){
+    //enumerate through each value of the spoiler json's entrance data
+    for (const [key, value] of Object.entries(spoiler['entrances'])){
         console.log(key, value); //debug output
 
         // split the KEY in the KEY:VALUE pair from the spoiler entry
@@ -278,7 +277,7 @@ function Parse(spoiler){
             regionOut = value
             //console.log("regionOut: " + regionOut) // debug output
 
-            // most interior locations only have one door, the front door. we will check for exceptions later
+            // most interior locations only have one door (the front door). we will check for exceptions later
             doorOut = "Front Door"
             //console.log("doorOut: " + doorOut)
 
@@ -289,7 +288,7 @@ function Parse(spoiler){
         }
         // if the VALUE in the KEY:VALUE pair from the spoiler entry is neither an object or a string, we don't know what this is
         else{
-            console.log("ERROR PARSING SPOILER: value( " + value + " ) must be either an object or a string, not " + typeof(value)) // debug output
+            console.log("ERROR PARSING ENTRANCES: value( " + value + " ) must be either an object or a string, not " + typeof(value)) // debug output
         }
 
         // fix the region names so we don't map redundant nodes (doorIn only here for clarification - see SimplifyNodeNames())
