@@ -12,11 +12,9 @@
 
 <body>
   <div class='primary-container'>
-    <div class="blank-space">
 
-    </div>
     <header class="header">
-      <h1 id="title">Map Generator for Ocarina of Time Randomizer</h1>
+      <h1 id="title">* Map Generator for Ocarina of Time Randomizer *</h1>
       <h3 id="mapper-by-mb">Mapper by MediumBob</h3>
     </header>
     <div class="links">
@@ -32,22 +30,22 @@
 
     <section class="summary">
       <p>This tool generates an interactive network graph of the randomized map generated with the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer (by TestRunner et. al.)</a></p>
-      <div class="generator-buttons">
-        <div class="upload-spoiler">
-          <p><b>If you would like to map your own seed, you'll need to upload the seed's spoiler file. click the "Browse" button below to upload.</b>
-          </p>
-          <form>
-            <input type="file" id="spoilerUpload" accept="text/json"/>
-          </form> 
-        </div>
-        <div class="load-demo">
-          <p>If you would just like to see how the tool works, click the "Try Demo!" button below to use the <a
-              href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/demo-spoiler.json">demo spoiler</a>.
-          </p>
-          <button id="loadDemoSpoiler">Try Demo!</button>
-        </div>
-      </div>
     </section>
+    <div class="upload-spoiler">
+      <p><b>Upload your own spoiler!</b>
+      </p>
+      <form>
+        <input type="file" id="spoilerUpload" accept="text/json"/>
+      </form> 
+    </div>
+
+    <div class="load-demo">
+      <p><b>Or, Try the demo!</b></p>
+      <p>Will generate a graph using the <a href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/demo-spoiler.json">demo spoiler</a>.
+      </p>
+      <button id="loadDemoSpoiler">Try Demo!</button>
+    </div>
+
 
 
     <aside class="map-tools">
@@ -85,17 +83,16 @@
             <button>clear</button>
           </div>
         </div>
-        <hr>
       </div>
     </aside>
     <!-- Map window - version, seed hash, and primary map window -->
     <section class='map-container'>
       <div class='map-header'>
         <div id='version'>
-          <h1>version:</h1>
+
         </div>
         <div id='seed-hash'>
-          <h1>seed hash:</h1>
+
         </div>
       </div>
       <div id="map-window">
@@ -122,6 +119,7 @@
           <br>
           <img src="./assets/images/save-spoiler-log.png" alt="How to save spoiler file" style="width:60%;height:45%">
           <br>
+          <p><b>NOTE: If you forget to download your spoiler, you'll need to refer to the <a href="https://wiki.ootrandomizer.com/index.php?title=Frequently_Asked_Questions#How_Do_I_Find_My_Spoiler_Log_Again.3F">OoT Randomizer FAQ</a> on how to recover it.</b></p>
           <p>Once you have saved your spoiler file and patched your ROM, you may close out of the randomizer window.</p>
         </ol>
         <li><b>Upload your seed.</b></li>
@@ -145,10 +143,11 @@
     </section>
     </div>
 
-  <script src="./scripts/test.js"></script>
   <script type="module" src="./scripts/try-demo.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> <!-- for spoiler upload - works with the form/input implementation, not the button -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> <!-- for spoiler upload - works with the form/input implementation, not the button. Also maybe used in grabbing images for the seed hash and version number-->
   <script src="./scripts/upload-spoiler.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script src="./scripts/mapper.js"></script>
 </body>
 
 </html>

@@ -156,7 +156,7 @@ function GetNodeType(regionIn, doorIn, regionOut, currentNodeType){
  * @param {string} nodeType
  * @returns a dictionary of the node's properties
  */
-function DetermineNodeProperties(nodeType){
+function GenerateNodeProperties(nodeType){
     // init desired properties
     let nodeShape, nodeColor, nodeSize, edgeColor
 
@@ -218,6 +218,50 @@ function DetermineNodeProperties(nodeType){
     return nodeProperty
 }
 
+function ReadSpoilerEntry(key, value){
+    console.log(key, value); //debug output
+    let regionIn, doorIn, regionOut, doorOut, currentNodeType
+
+    // split the KEY in the KEY:VALUE pair from the spoiler entry (key format: "Region -> Door")
+    const split = key.split("->")
+
+    // get the region you come from
+    regionIn = split[0].trim()
+    console.log("regionIn: " + regionIn) // debug output
+
+    // get the door you walk into
+    doorIn = split[1].trim()
+    console.log("doorIn: " + doorIn) // debug output
+
+    // if the VALUE in the KEY:VALUE pair from the spoiler entry is an object (dictionary), it's an overworld mapping
+    if (typeof(value) === "object"){
+        // get the region you go to
+        regionOut = value["region"]
+
+        //get the door you walk out of
+        doorOut = value["from"]
+
+        // set potential node type
+        currentNodeType = "overworld"
+    }
+    // if the VALUE in the KEY:VALUE pair from the spoiler entry is a string, it's an interior mapping
+    else if (typeof(value) === "string"){
+        // get the room you walk into
+        regionOut = value
+
+        // most interior locations only have one door (the front door). we will check for exceptions later
+        doorOut = "Front Door"
+
+        // set potential node type
+        currentNodeType = "interior"
+    }
+    // if the VALUE in the KEY:VALUE pair from the spoiler entry is neither an object or a string, we don't know what this is
+    else{
+        console.log("ERROR PARSING ENTRANCES: value( " + value + " ) must be either an object or a string, not " + typeof(value)) // debug output
+    }
+    const returnValues = [regionIn, doorIn, regionOut, doorOut, currentNodeType]
+    return returnValues
+}
 
 /**
  * Builds up the following arrays/dictionaries based on the spoiler data:
@@ -239,91 +283,59 @@ function DetermineNodeProperties(nodeType){
 function Parse(spoiler){
     console.log("inside parse")
     // init desired variables
-    let regionIn, doorIn, regionOut, doorOut, currentNodeType, 
-        nodesFrom = [], nodesTo = [], edgeLabels = [], singleNodeProperties = {}, allNodeProperties = {}
+    let regionIn, doorIn, regionOut, doorOut, currentNodeType
+    let graphDetails = {
+        nodes: [], 
+        links: []
+    }
 
-    //enumerate through each value of the spoiler json's entrance data
+    //enumerate through each value of the spoiler json's entrance data - for each entry:
     for (const [key, value] of Object.entries(spoiler['entrances'])){
-        console.log(key, value); //debug output
+        // get the region you come from/go to, the door you walk into/out of, and note if this is an overworld or interior mapping
+        let entryData = ReadSpoilerEntry(key,value)
+        regionIn = entryData[0]
+        doorIn = entryData[1]
+        regionOut = entryData[2]
+        doorOut = entryData[3]
+        currentNodeType = entryData[4]
 
-        // split the KEY in the KEY:VALUE pair from the spoiler entry
-        let split = key.split("->")
-
-        // get the region you come from
-        regionIn = split[0].trim()
-        console.log("regionIn: " + regionIn) // debug output
-
-        // get the door you walk into
-        doorIn = split[1].trim()
-        console.log("doorIn: " + doorIn) // debug output
-
-        // if the VALUE in the KEY:VALUE pair from the spoiler entry is an object (dictionary), it's an overworld mapping
-        if (typeof(value) === "object"){
-            // get the region you go to
-            regionOut = value["region"]
-            //console.log("regionOut: " + regionOut) // debug output
-
-            //get the door you walk out of
-            doorOut = value["from"]
-            //console.log("doorOut: " + doorOut) // debug output
-
-            // set potential node type
-            currentNodeType = "overworld"
-            //console.log("currentNodeType: " + currentNodeType) // debug output
-        }
-        // if the VALUE in the KEY:VALUE pair from the spoiler entry is a string, it's an interior mapping
-        else if (typeof(value) === "string"){
-            // get the room you walk into
-            regionOut = value
-            //console.log("regionOut: " + regionOut) // debug output
-
-            // most interior locations only have one door (the front door). we will check for exceptions later
-            doorOut = "Front Door"
-            //console.log("doorOut: " + doorOut)
-
-            // set potential node type
-            currentNodeType = "interior"
-            //console.log("currentNodeType: " + currentNodeType) // debug output
-            
-        }
-        // if the VALUE in the KEY:VALUE pair from the spoiler entry is neither an object or a string, we don't know what this is
-        else{
-            console.log("ERROR PARSING ENTRANCES: value( " + value + " ) must be either an object or a string, not " + typeof(value)) // debug output
-        }
-
-        // fix the region names so we don't map redundant nodes (doorIn only here for clarification - see SimplifyNodeNames())
+        // fix the region names so we don't map redundant nodes
         let simplifiedNames = SimplifyNodeNames(regionIn, doorIn)
         regionIn = simplifiedNames[0]
         doorIn = simplifiedNames[1]
 
-        // determine what type of node we're looking at
+        // determine node type
         let nodeType = GetNodeType(regionIn, doorIn, regionOut, currentNodeType)
 
         // create the edge label
         let edgeLabel = "from [" + regionIn.toUpperCase() + "] : take [" + doorIn + "] door\nfrom [" + regionOut.toUpperCase() + "] : take [" + doorOut + "] door"
 
         // determine the correct node properties
-        singleNodeProperties = DetermineNodeProperties(nodeType)
+        //singleNodeProperties = GenerateNodeProperties(nodeType)
         
         // store details for this entry
-        console.log("adding " + regionIn + " to nodesFrom")
-        nodesFrom.push(regionIn)                                    // node from
-        console.log("adding " + regionOut + " to nodesTo")
-        nodesTo.push(regionOut)                                     // node to
-        console.log("adding \n" + edgeLabel + "\nto edgeLabels")
-        edgeLabels.push(edgeLabel)                                  // edge label
-        allNodeProperties[regionIn] = (singleNodeProperties)        // node properties
-        console.log(Object.entries(allNodeProperties))
+        console.log("storing " + regionIn + " to graphDetails")
+        // if regionIn is not in the nodes array, add it
+        if (!graphDetails.nodes.includes(regionIn)){
+            graphDetails.nodes.push({id:regionIn, type:nodeType})
+        }
+        // if regionOut is not in the nodes array, add it (if it's not an overworld mapping)
+        if (nodeType != 'overworld' && !graphDetails.nodes.includes(regionOut)){
+            graphDetails.nodes.push({id:regionOut, type:nodeType})
+        }
+        
+        // NOTE: This is probably where we need to determine if the edge properties (if it's strictly or conditionally directed)
+        graphDetails.links.push({source:regionIn, target:regionOut, label:edgeLabel})
+        // console.log("adding " + regionOut + " to nodesTo")
+        // nodesTo.push(regionOut)                                     // node to
+        // console.log("adding \n" + edgeLabel + "\nto edgeLabels")
+        // edgeLabels.push(edgeLabel)                                  // edge label
+        // allNodeProperties[regionIn] = (singleNodeProperties)        // node properties
+        //console.log(Object.entries(graphDetails))
     }//end for loop
-
-    // gather graph details into an object we can give to the mapper
-    const graphDetails = {
-        "nodesFrom" : nodesFrom,
-        "nodesTo" : nodesTo,
-        "edgeLabels" : edgeLabels,
-        "nodeProperties" : allNodeProperties
-    }
+    console.log(graphDetails.nodes)
+    console.log(graphDetails.links)
     return graphDetails
 }
 
-export { SimplifyNodeNames, GetNodeType, DetermineNodeProperties, Parse }
+export { SimplifyNodeNames, GetNodeType, GenerateNodeProperties, ReadSpoilerEntry, Parse }

@@ -1,5 +1,5 @@
-# OoT_RandomizerMappingTool
-**WARNING: This project is still in development!** Please be patient, as I am learning javascript on the fly here.
+# Map Generator for Ocarina of Time Randomizer
+**WARNING: This project is still in development!**
 
 # Description
 This tool visualizes the randomized map generated with the [Ocarina of Time Randomizer](https://ootrandomizer.com/) v7.1 (by TestRunner et al.) given a seed's spoiler file.
@@ -11,6 +11,10 @@ This tool visualizes the randomized map generated with the [Ocarina of Time Rand
     3. ***BE SURE to save the spoiler file before closing out of this window!*** You'll find this option below the "PATCH ROM!" button.
 
 ![Screenshot](./src/assets/images/save-spoiler-log.png)
+
+>**NOTE: If you forgot to download your spoiler, you can refer to the [OoT Randomizer FAQ](https://wiki.ootrandomizer.com/index.php?title=Frequently_Asked_Questions#How_Do_I_Find_My_Spoiler_Log_Again.3F) on how to recover it.**
+
+Once you have saved your spoiler file and patched your ROM, you may close out of the randomizer window.
 
 2. **Upload your seed.**
     1. **Navigate to the [OoT_RandomizerMappingTool](url goes here)**, (hosted on Github Pages).
