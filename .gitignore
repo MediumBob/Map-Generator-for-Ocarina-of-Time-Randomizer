@@ -5,3 +5,6 @@ dev/
 
 # vscode settings (auto-generates when I run live server during development)
 .vscode
+
+# node modules (really just here for jest tests)
+node_modules/
