@@ -4,99 +4,150 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OoT Randomizer Mapping Tool</title>
+  <title>Map Generator: OoT Randomizer</title>
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="./assets/css/index.css">
   <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'> <!-- for search icon -->
 </head>
 
 <body>
-  <div class='page-container'>
-    <!-- Top of page - instructions -->
-    <section class="top-page-container">
-      <header class="summary">
-        <h1>Instructions</h1>
-        <ul>
-          <li><b>If you would like to map your own seed, click the "Upload Spoiler" button below</b>.</li>
-          <li>If you're just here to see how the tool works, click the "Try Demo!" button below to use the <a
-              href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/demo-spoiler.json">demo spoiler</a>.</li>
-        </ul>
-      </header>
-    </section>
-    <!-- Middle of page - map and search tools -->
-    <section class='center-page-container'>
-      <!-- Map tools window - search bar and path lookup -->
-      <aside class="map-tools">
-        <h1>Search for a location</h1>
-        <div class='node-lookup-search-bar'>
-          <p>Search: </p>
-          <input type="text" placeholder="Select a node" name="Search">
-          <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-        </div>
-        <div class='path-finder-container'>
-          <h1>Find path(s) between nodes</h1>
-          <div class='path-finder-search-bars'>
-            <p>Node From: </p>
-            <input type="text" placeholder="Select a node" name="Node from">
-          </div>
-          <div class='path-finder-search-bars'>
-            <p>Node To: </p>
-            <input type="text" placeholder="Select a node" name="Node to">
-          </div>
-          <div class="path-finder-lower">
-            <div class='number-of-paths-entry'>
-              <!-- <h1>num paths</h1> -->
-              <label for="Number of paths">Number of paths:</label>
-              <select name="Number of paths" id="numPaths">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-            </div>
-            <div class='path-finder-search-button'>
-              <button>find path(s)</button>
-            </div>
-            <div class='path-finder-clear-button'>
-              <button>clear</button>
-            </div>
-          </div>
-        </div>
-      </aside>
-      <!-- Map window - version, seed hash, and primary map window -->
-      <section class='map-container'>
-        <div class='map-header'>
-          <div class='version'>
-            <h1>version</h1>
-          </div>
-          <div class='seed-hash'>
-            <h1>seed hash</h1>
-          </div>
-        </div>
-        <div>
-          <form>
-            <input type="file" id="spoilerUpload" accept="text/json"/>
-          </form> 
-          <!-- <button onclick="UploadSpoiler()" id="spoilerUpload">Upload Spoiler</button> -->
-          <button id="loadDemoSpoiler">Try Demo!</button>
-          <button onclick="Test()">Test</button>
-        </div>
-      </section>
-      <!-- Map details window - contents update when clicking on nodes/edges of map -->
-      <aside class="map-details">
-        <h1>This is where the node details go</h1>
-      </aside>
-    </section>
-    <!-- Bottom of page -->
-    <section class='bottom-page-container'>
-      <h1>dummy section</h1>
-      <div id="output">text output goes here maybe? like loading errors or w/e</div>
-    </section>
-  </div>
+  <div class='primary-container'>
 
-  <script src="./scripts/test.js"></script>
-  <script src="./scripts/try-demo.js"></script>
+    <header class="header">
+      <h1 id="title">* Map Generator for Ocarina of Time Randomizer *</h1>
+      <h3 id="mapper-by-mb">Mapper by MediumBob</h3>
+    </header>
+    <div class="links">
+      <ul>
+        <li>
+          <a href="#">Github</a>
+        </li>
+        <li>
+          <a href="#">OoT Rando</a>
+        </li>
+      </ul>
+    </div>
+
+    <section class="summary">
+      <p>This tool generates an interactive network graph of the randomized map generated with the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer (by TestRunner et. al.)</a></p>
+    </section>
+    <div class="upload-spoiler">
+      <p><b>Upload your own spoiler!</b>
+      </p>
+      <form>
+        <input type="file" id="spoilerUpload" accept="text/json"/>
+      </form> 
+    </div>
+
+    <div class="load-demo">
+      <p><b>Or, Try the demo!</b></p>
+      <p>Will generate a graph using the <a href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/demo-spoiler.json">demo spoiler</a>.
+      </p>
+      <button id="loadDemoSpoiler">Try Demo!</button>
+    </div>
+
+
+
+    <aside class="map-tools">
+      <h2>Search for a location</h2>
+      <div class='node-lookup-search-bar'>
+        <p>Search: </p>
+        <input type="text" placeholder="Select a node" name="Search">
+        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+      </div>
+      <hr>
+      <div class='path-finder-container'>
+        <h2>Find path(s) between nodes</h2>
+        <div class='path-finder-search-bars'>
+          <p>Node From: </p>
+          <input type="text" placeholder="Select a node" name="Node from">
+        </div>
+        <div class='path-finder-search-bars'>
+          <p>Node To: </p>
+          <input type="text" placeholder="Select a node" name="Node to">
+        </div>
+        <div class="path-finder-lower">
+          <div class='number-of-paths-entry'>
+            <!-- <h1>num paths</h1> -->
+            <label for="Number of paths">Number of paths:</label>
+            <select name="Number of paths" id="numPaths">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+          <div class='path-finder-search-button'>
+            <button>find path(s)</button>
+          </div>
+          <div class='path-finder-clear-button'>
+            <button>clear</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <!-- Map window - version, seed hash, and primary map window -->
+    <section class='map-container'>
+      <div class='map-header'>
+        <div id='version'>
+
+        </div>
+        <div id='seed-hash'>
+
+        </div>
+      </div>
+      <div id="map-window">
+        <!-- <button onclick="UploadSpoiler()" id="spoilerUpload">Upload Spoiler</button> -->
+        <p>No spoiler selected - nothing to graph!</p>
+      </div>
+    </section>
+    <aside class="map-details">
+      <h1>This is where the node details go</h1>
+    </aside>
+
+    <!-- Bottom of page -->
+    <section class='instructions'>
+      <hr>
+      <h1>How to use this tool:</h1>
+      <ol>
+        <li><b>Generate a seed.</b></li>
+        <ol type="i">
+          <li>Navigate to the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer Web Generator</a> (by dragonbane0 & TreZc0_) and select "Play Now". Adjust the randomization rules as desired, then select "GENERATE SEED!" at the bottom of the page.</li>
+          <br>
+          <li>On the following page, click "BROWSE" to select your Ocarina of Time base ROM (file with .n64 extension), then scroll down and select "PATCH ROM!".</li>
+          <br>
+          <li><b><i>BE SURE to click "Save Spoler Log File" to download the spoiler BEFORE closing out of this window!</i></b> You'll find this option below the "PATCH ROM!" button.</li>
+          <br>
+          <img src="./assets/images/save-spoiler-log.png" alt="How to save spoiler file" style="width:60%;height:45%">
+          <br>
+          <p><b>NOTE: If you forget to download your spoiler, you'll need to refer to the <a href="https://wiki.ootrandomizer.com/index.php?title=Frequently_Asked_Questions#How_Do_I_Find_My_Spoiler_Log_Again.3F">OoT Randomizer FAQ</a> on how to recover it.</b></p>
+          <p>Once you have saved your spoiler file and patched your ROM, you may close out of the randomizer window.</p>
+        </ol>
+        <li><b>Upload your seed.</b></li>
+        <ol type="i">
+          <li><b>Click the "Browse..." button <a rel="noopener" target="_blank" href="#summary">at the top of this page</a></b> to upload the spoiler for your seed (file with .json extension).</li>
+          <p>This tool should then generate a graph of your map in the central window of the page.</p>
+        </ol>
+        <li><b>Navigate your seed.</b></li>
+        <ol type="i">
+          <li>Use the <b>search bar</b> to highlight a region in your graph.</li>
+          <br>
+          <li>Use the <b>path finder</b> to highlight paths from one region to another.</li>
+          <br>
+          <li>Click on a node to display the <b>node details</b> in the panel on the right.</li>
+        </ol>
+      </ol>
+    </section>
+    <section class="other-notes">
+      <h2>Other Notes</h2>
+      <p><b>Spoilers generated with Ocarina of Time Randomizer versions prior to 7.1 are not guarenteed to work</b>. The developers have changed (and may continue to change) the naming conventions for the spoiler information, and the current parser does not include region names from older version of the OoT Randomizer.</p>
+    </section>
+    </div>
+
+  <script type="module" src="./scripts/try-demo.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> <!-- for spoiler upload - works with the form/input implementation, not the button. Also maybe used in grabbing images for the seed hash and version number-->
   <script src="./scripts/upload-spoiler.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> <!-- for spoiler upload - works with the form/input implementation, not the button -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script src="./scripts/mapper.js"></script>
 </body>
 
 </html>
