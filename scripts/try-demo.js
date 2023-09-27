@@ -52,7 +52,7 @@ function RenderVersion(version){
  */
 function RenderSeedHash(hash){
     // URL where hash images are located
-    const urlPrefix = 'https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/assets/images/Seed%20Hash/'
+    const urlPrefix = 'https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/assets/images/seed-hash/'
     
     // get DOM element for displaying seed hash
     let hashImages = document.getElementById('seed-hash')
