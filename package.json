@@ -1,0 +1,30 @@
+{
+  "name": "map-generator-for-ocarina-of-time-randomizer",
+  "version": "0.1.0",
+  "description": "This tool generates an interactive network graph of the randomized map created with the Ocarina of Time Randomizer v7.1 (by TestRunner et al.) given a seed's spoiler file.",
+  "main": "index.html",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MediumBob/Map-Generator-for-Ocarina-of-Time-Randomizer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MediumBob/Map-Generator-for-Ocarina-of-Time-Randomizer/issues"
+  },
+  "homepage": "https://github.com/MediumBob/Map-Generator-for-Ocarina-of-Time-Randomizer#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.22.20",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  }
+}
