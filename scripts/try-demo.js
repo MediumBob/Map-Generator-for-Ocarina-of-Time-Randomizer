@@ -28,7 +28,7 @@ function RenderVersion(version){
     versionNumber.innerHTML += version
 
     // init variables for checking version validity
-    const urlPrefix = 'https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/images/' // for checkmark/warning icons
+    const urlPrefix = 'https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/assets/images/' // for checkmark/warning icons
     let iconPath;
     let icon = document.createElement('img')
     const split = version.split('.')
@@ -52,7 +52,7 @@ function RenderVersion(version){
  */
 function RenderSeedHash(hash){
     // URL where hash images are located
-    const urlPrefix = 'https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/src/assets/images/Seed%20Hash/'
+    const urlPrefix = 'https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/assets/images/Seed%20Hash/'
     
     // get DOM element for displaying seed hash
     let hashImages = document.getElementById('seed-hash')
@@ -67,7 +67,7 @@ function RenderSeedHash(hash){
 }
 
 // URL for demo spoiler (from the github repo) 
-const demoSpoilerURL = 'https://raw.githubusercontent.com/MediumBob/OoT_RandomizerMappingTool/main/src/assets/demo-spoiler.json';
+const demoSpoilerURL = 'https://raw.githubusercontent.com/MediumBob/OoT_RandomizerMappingTool/main/assets/demo-spoiler.json';
 
 // add event listener to the "Try Demo!" button on the main page
 document.getElementById('loadDemoSpoiler').addEventListener('click', function () {

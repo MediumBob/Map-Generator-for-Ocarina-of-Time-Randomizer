@@ -10,7 +10,7 @@ This tool visualizes the randomized map generated with the [Ocarina of Time Rand
     2. On the following page, click "BROWSE" to select your Ocarina of Time base ROM (file with .n64 extension), then scroll down and select "PATCH ROM!".
     3. ***BE SURE to save the spoiler file before closing out of this window!*** You'll find this option below the "PATCH ROM!" button.
 
-![Screenshot](./src/assets/images/save-spoiler-log.png)
+![Screenshot](./assets/images/save-spoiler-log.png)
 
 >**NOTE: If you forgot to download your spoiler, you can refer to the [OoT Randomizer FAQ](https://wiki.ootrandomizer.com/index.php?title=Frequently_Asked_Questions#How_Do_I_Find_My_Spoiler_Log_Again.3F) on how to recover it.**
 
