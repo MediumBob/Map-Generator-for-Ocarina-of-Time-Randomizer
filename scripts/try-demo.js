@@ -1,4 +1,5 @@
 import {Parse} from './parser.js';
+import {GenerateGraph} from './mapper.js';
 
 /**
  * send an http GET request to the specified path
@@ -83,6 +84,7 @@ document.getElementById('loadDemoSpoiler').addEventListener('click', function ()
         const entranceData = Parse(demoSpoiler)
         
         // generate the graph
+        const map = GenerateGraph(entranceData)
 
         // update the DOM
 
