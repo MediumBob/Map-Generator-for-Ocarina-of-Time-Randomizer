@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'Triforce';
+    size-adjust: 150%;
+    src: url('../font/Triforce-y07d.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    color: white;
+  
+    background-image: url('../images/oot_background.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+  
+  /* dark region in front of the background image */
+  .primary-container {
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(8, 1fr));  */
+    background-color: rgba( 0, 0, 0, 0.75); 
+    margin: 1%;
+    padding: 1%;
+    gap: 5px;
+  
+  }
+  
+  .top-nav-bar {
+    font-family: 'Triforce';
+    overflow: hidden;
+    background-color: rgba(196, 201, 198, 0.25); 
+  }
+  
+  .top-nav-bar a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  .top-nav-bar a:hover {
+    background-color: #AF2830;
+    color: black;
+  }
+  
+  .top-nav-bar a.active {
+    background-color: #011674;
+    color: white;
+  }
+  
