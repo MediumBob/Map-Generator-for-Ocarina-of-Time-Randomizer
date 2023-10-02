@@ -8,6 +8,3 @@ dev/
 
 # various resources for jest testing
 node_modules/
-package-lock.json
-package.json
-babel.config.js
