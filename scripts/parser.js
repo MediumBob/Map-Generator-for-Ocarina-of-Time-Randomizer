@@ -70,7 +70,7 @@ function AdjustNodeNames(regionIn){
         regionIn = "Lon Lon Ranch"
     }
     else{
-        //console.log("no adjustments")
+        console.log("no adjustments")
     }
     return regionIn
 }
