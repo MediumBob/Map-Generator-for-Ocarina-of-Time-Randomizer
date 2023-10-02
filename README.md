@@ -1,4 +1,4 @@
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/MediumBob/Map-Generator-for-Ocarina-of-Time-Randomizer/test.yml)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/mediumbob/Map-Generator-for-Ocarina-of-Time-Randomizer/unit-tests.yml)
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mediumbob/Map-Generator-for-Ocarina-of-Time-Randomizer/main?logo=github&label=version&color=%23337dff)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mediumbob/Map-Generator-for-Ocarina-of-Time-Randomizer/main)
 
