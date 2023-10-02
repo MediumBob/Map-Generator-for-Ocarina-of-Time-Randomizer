@@ -87,6 +87,10 @@ document.getElementById('loadDemoSpoiler').addEventListener('click', function ()
         const map = GenerateGraph(entranceData)
 
         // update the DOM
+        const div = d3.select("#map-window");
+
+        // Append the SVG node to the div
+        div.node().appendChild(map);
 
     })
 });

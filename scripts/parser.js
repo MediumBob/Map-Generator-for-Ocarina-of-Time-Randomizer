@@ -70,7 +70,7 @@ function AdjustNodeNames(regionIn){
         regionIn = "Lon Lon Ranch"
     }
     else{
-        console.log("no adjustments")
+        //console.log("no adjustments")
     }
     return regionIn
 }
@@ -84,99 +84,46 @@ function AdjustNodeNames(regionIn){
  * @param {string} currentNodeType - either "overworld" or "interior" - we refine these further here
  * @returns the appropriate node type
  */
-function GetNodeType(regionIn, doorIn, regionOut, currentNodeType){
+function GetNodeType(regionIn, currentNodeType){
     // at this point, we only know if its an overworld or interior node
     let nodeType = currentNodeType
     
-    // check for specific node type based on entry details
-    if (regionIn.includes("Boss Door")){
-        nodeType = "boss door"
+    if (currentNodeType === 'overworld'){
+        // check for specific node type based on entry details
+        if (regionIn.includes("Boss Door") || regionIn.includes("Lobby")){
+            nodeType = "dungeon"
+        }
+        else if (regionIn.includes("Spawn")){
+            nodeType = "spawn"
+        }
+        else if (regionIn.includes("Warp") && regionIn !== "GC Woods Warp" && regionIn !== "Graveyard Warp Pad Region"){
+            nodeType = "song"
+        }
+        // else if (doorIn.includes("Lobby") || doorIn.includes("Beginning") || doorIn.includes("Well") || (doorIn.includes("Temple") && !doorIn.includes("Time"))){
+        //     nodeType = "dungeon"
+        // }
     }
-    else if (regionIn.includes("Spawn")){
-        nodeType = "spawn"
-    }
-    else if (regionIn.includes("Warp") && regionIn !== "GC Woods Warp" && regionIn !== "Graveyard Warp Pad Region"){
-        nodeType = "song"
-    }
-    else if (doorIn.includes("Lobby") || doorIn.includes("Beginning") || doorIn.includes("Well") || (doorIn.includes("Temple") && !doorIn.includes("Time"))){
-        nodeType = "dungeon"
-    }
-    else if (regionOut.includes("Grotto") || regionOut === "Deku Theater"){
-        nodeType = "grotto"
-    }
-    else if (regionOut.includes("Grave") && !regionOut.includes("House")){
-        nodeType = "grave"
-    }
-    else if (regionOut.includes("Great Fairy Fountain")){
-        nodeType = "great fairy fountain"
+    else if (currentNodeType === 'interior'){
+        // if (regionOut.includes("Grotto") || regionOut === "Deku Theater"){
+        //     nodeType = "grotto"
+        // }
+        // else if (regionOut.includes("Grave") && !regionOut.includes("House")){
+        //     nodeType = "grave"
+        // }
+        // else if (regionOut.includes("Great Fairy Fountain")){
+        //     nodeType = "great fairy fountain"
+        // }
     }
     return nodeType
 }
 
 
 /**
- * Generate appropriate node properties based on the node type
- * @param {string} regionIn
- * @param {string} nodeType
- * @returns a dictionary of the node's properties
+ * 
+ * @param {*} key 
+ * @param {*} value 
+ * @returns 
  */
-function GenerateNodeProperties(nodeType){
-    // init desired properties
-    let nodeShape, nodeColor, nodeSize, edgeColor
-
-    //set node properties
-    if (nodeType === 'overworld'){
-        nodeShape = 'ellipse'
-        nodeColor = '#0081a7' // blue
-        nodeSize = 25
-    }
-    else if (nodeType === 'interior'){
-        nodeShape = 'box'
-        nodeColor = '#db9f00' // orange
-        nodeSize = 20
-    }
-    else if (nodeType === 'boss door'){
-        nodeShape = 'dot'
-        nodeColor = 'black'
-        nodeSize = 1
-    }
-    else if (nodeType === 'spawn'){
-        nodeShape = 'star'
-        nodeColor = 'white'
-        nodeSize = 30
-    }
-    else if (nodeType === 'song'){
-        nodeShape = 'star'
-        nodeColor = 'blue'
-        nodeSize = 20
-    }
-    else if (nodeType === 'dungeon'){
-        nodeShape = 'triangleDown'
-        nodeColor = 'red'
-        nodeSize = 25
-    }
-    else if (nodeType === 'grotto'){
-        nodeShape = 'dot'
-        nodeColor = '#a5550a' // brown
-        nodeSize = 1
-    }
-    else if (nodeType === 'grave'){
-        nodeShape = 'dot'
-        nodeColor = '#9a9a9a' // gray
-        nodeSize = 1
-    }
-    else if (nodeType === 'great fairy fountain'){
-        nodeShape = 'dot'
-        nodeColor = 'black'
-        nodeSize = 1
-    }
-    edgeColor = nodeColor // default; will change for special cases elsewhere
-    
-    // update node properties for a single entry from the spoiler
-    let nodeProperty = {'node type':nodeType, 'node shape':nodeShape, 'node color':nodeColor, 'node size':nodeSize, 'edge color':edgeColor}
-    return nodeProperty
-}
-
 function ReadSpoilerEntry(key, value){
     console.log(key, value); //debug output
     let regionIn, doorIn, regionOut, doorOut, currentNodeType
@@ -222,21 +169,10 @@ function ReadSpoilerEntry(key, value){
 }
 
 /**
- * Builds up the following arrays/dictionaries based on the spoiler data:
- *  1. nodesFrom - all the regions you come from
- *  2. nodesTo - all the regions you go to
- *  3. edgeLabels - all the edge labels (what door you walked into/out of)
- *  4. singleNodeProperties - stores the following node properties for a single entry of the spoiler:
- *     i.   nodeType (overworld, interior, dunegon, grotto, etc.)
- *     ii.  nodeShape
- *     iii. nodeColor
- *     vi.  nodeSize
- *     v.   edgeColor
- *  5. allNodeProperties - associates the values from singleNodeProperties(4) to the appropriate value from nodesFrom(1)
- * This information is used by the Mapper to generate our graph.
+ * 
  * 
  * @param {object} spoiler - the JSON data from the spoiler file
- * @returns a dictionary storing all the details that the Mapper will need to generate our graph
+ * @returns 
  */
 function Parse(spoiler){
     console.log("inside parse");
@@ -262,26 +198,39 @@ function Parse(spoiler){
             doorIn = doorIn + " (From LW Bridge)" // Lost Woods has two doors to Kokiri Forest - this makes them distinct
         }
 
-        // fix the region names so we don't map redundant nodes
+        // simplify the region names so we don't map redundant nodes
         regionIn = AdjustNodeNames(regionIn);
-
-        // check for boss rooms and adjust for boss doors (spoiler notation is backwards - the LHS of the "->" is the door and the RHS is the region. Makes sense when you're reading it, but opposite to the rest of the spoiler log)
 
         // determine node type
         let nodeType = GetNodeType(regionIn, doorIn, regionOut, currentNodeType);
 
+
+        // check for boss rooms and adjust for boss doors (spoiler notation is backwards - the LHS of the "->" is the door and the RHS is the region. Makes sense when you're reading it, but opposite to the rest of the spoiler log)
+        if (regionIn.includes("Boss Door")){
+        }
+        
+        
         // create the edge label
         let edgeLabel = "from [" + regionIn.toUpperCase() + "] : take [" + doorIn + "] door\nfrom [" + regionOut.toUpperCase() + "] : take [" + doorOut + "] door";
+        
+        
+        console.log("RegionIn: " + regionIn)
+        console.log("DoorIn: " + doorIn)
+        console.log("nodeType: " + nodeType)
+        console.log("regionOut: " + regionOut)
 
-        // determine the correct node properties
-        //singleNodeProperties = GenerateNodeProperties(nodeType)
         
         // if regionIn is not in the nodes array, add it
         let existingElement = graphDetails.nodes.find(node => node.id === regionIn);
         if (!existingElement){
             graphDetails.nodes.push({id:regionIn, type:nodeType});
         }
-        // if regionOut is not in the nodes array, add it (if it's not an overworld mapping)
+        // if regionOut is not in the nodes array, add it 
+        existingElement = graphDetails.nodes.find(node => node.id === AdjustNodeNames(regionOut));
+        if (!existingElement){
+            graphDetails.nodes.push({id:AdjustNodeNames(regionOut), type:"skipping for now"});
+        }
+        // if this is an interior mapping? OUTDATED:(if regionOut is not in the nodes array, add it (if it's not an overworld mapping))
         existingElement = graphDetails.nodes.find(node => node.id === regionOut)
         if (!existingElement && nodeType != 'overworld'){
             //regionOut = AdjustNodeNames(regionOut)
@@ -304,4 +253,4 @@ function Parse(spoiler){
     return graphDetails;
 }
 
-export { AdjustNodeNames, GetNodeType, GenerateNodeProperties, ReadSpoilerEntry, Parse };
+export { AdjustNodeNames, GetNodeType, ReadSpoilerEntry, Parse };

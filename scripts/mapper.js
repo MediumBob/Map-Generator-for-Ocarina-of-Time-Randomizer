@@ -1,5 +1,13 @@
 function GenerateGraph(data){
-    console.log("Top of GenerateGraph")
+    // specify specs for zoom
+    function zoomed({transform}) {
+        node.attr("transform", transform);
+        link.attr("transform", transform);
+      }
+    const zoom = d3.zoom()
+    .scaleExtent([1, 40])
+    .on("zoom", zoomed);
+
     // Specify the dimensions of the chart.
     const width = 928;
     const height = 680;
@@ -7,20 +15,20 @@ function GenerateGraph(data){
     // Specify the color scale.
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    console.log("b4")
     // The force simulation mutates links and nodes, so create a copy
     // so that re-evaluating this cell produces the same result.
     const links = data.links.map(d => ({...d}));
     const nodes = data.nodes.map(d => ({...d}));
-    console.log("after")
+
+    // debug output
     console.log(Object.entries(nodes))
+
     // Create a simulation with several forces.
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id))
         .force("charge", d3.forceManyBody())
         .force("x", d3.forceX())
         .force("y", d3.forceY());
-console.log("1")
 
     // Create the SVG container.
     const svg = d3.create("svg")
@@ -28,7 +36,6 @@ console.log("1")
         .attr("height", height)
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("style", "max-width: 100%; height: auto;");
-        console.log("2")
 
     // Add a line for each link, and a circle for each node.
     const link = svg.append("g")
@@ -38,7 +45,6 @@ console.log("1")
         .data(links)
         .join("line")
         .attr("stroke-width", d => Math.sqrt(d.value));
-        console.log("3")
 
     const node = svg.append("g")
         .attr("stroke", "#fff")
@@ -48,10 +54,11 @@ console.log("1")
         .join("circle")
         .attr("r", 5)
         .attr("fill", d => color(d.group));
-        console.log("4")
 
     node.append("title")
         .text(d => d.id);
+
+    svg.call(zoom);
 
     // Add a drag behavior.
     node.call(d3.drag()
@@ -96,7 +103,7 @@ console.log("1")
     // When this cell is re-run, stop the previous simulation. (This doesn’t
     // really matter since the target alpha is zero and the simulation will
     // stop naturally, but it’s a good practice.)
-    invalidation.then(() => simulation.stop());
+    //invalidation.then(() => simulation.stop());
 
     return svg.node();
 }
