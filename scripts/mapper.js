@@ -1,8 +1,9 @@
 function GenerateGraph(data){
-    // specify specs for zoom
+    // specify zoom functionality
     function zoomed({transform}) {
         node.attr("transform", transform);
         link.attr("transform", transform);
+        text.attr("transform", transform);
       }
     const zoom = d3.zoom()
     .scaleExtent([1, 40])
@@ -26,7 +27,7 @@ function GenerateGraph(data){
     // Create a simulation with several forces.
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody())
+        .force("charge", d3.forceManyBody().strength(d => d.nodeType === 'interior' ? -50 : -90))
         .force("x", d3.forceX())
         .force("y", d3.forceY());
 
@@ -47,16 +48,28 @@ function GenerateGraph(data){
         .attr("stroke-width", d => Math.sqrt(d.value));
 
     const node = svg.append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .selectAll("circle")
-        .data(nodes)
-        .join("circle")
-        .attr("r", 5)
-        .attr("fill", d => color(d.group));
+        .attr("stroke", "#fff")             // border color (white)
+        .attr("stroke-width", 1.0)          // border width
+        .selectAll("circle")                // select circle elements
+        .data(nodes)                        // bind graph data to the circle elements
+        .join("circle")                     // join graph data to the circle elements (how is this different than above line?)
+        .attr("r", 5)                       // set radius to 5
+        .attr("fill", d => color(d.type));  // set node color based on its type
 
     node.append("title")
         .text(d => d.id);
+
+    const text = svg.selectAll("text")
+        .data(nodes)
+        .enter()
+        .append("text")
+        .text(d => d.id)
+        .attr("x", d => d.x)
+        .attr("y", d => d.y)
+        .attr("dy", "2em")
+        .style("text-anchor", "middle")
+        .style("fill", "white")
+        .style("font-size", "6px");
 
     svg.call(zoom);
 
@@ -77,11 +90,14 @@ function GenerateGraph(data){
         node
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
+        text
+            .attr("x", d => d.x)
+            .attr("y", d => d.y);
     });
 
     // Reheat the simulation when drag starts, and fix the subject position.
     function dragstarted(event) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
+        if (!event.active) simulation.alphaTarget(0.1).restart();
         event.subject.fx = event.subject.x;
         event.subject.fy = event.subject.y;
     }
@@ -91,6 +107,7 @@ function GenerateGraph(data){
         event.subject.fx = event.x;
         event.subject.fy = event.y;
     }
+
 
     // Restore the target alpha so the simulation cools after dragging ends.
     // Unfix the subject position now that it’s no longer being dragged.
