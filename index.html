@@ -12,12 +12,22 @@
 </head>
 
 <body>
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="#">Find a Node</a>
+    <a href="#">Find a Path</a>
+  </div>
+  
+  <div id="main">
+    <button class="openbtn" onclick="openNav()">☰ Open Navigation Tools</button>  
+  </div>
+
   <div class='primary-container'>
 
     <div class="top-nav-bar">
-      <a class="active" href="index.html">Upload</a>
+      <a class="active" href="index.html">Home</a>
       <a href="./pages/instructions.html">Instructions</a>
-      <a href="./pages/about.html">About</a>
+      <a href="./pages/faq.html">FAQ</a>
     </div>
     <hr>
     
@@ -29,18 +39,20 @@
       <p>This tool generates an interactive network graph of the randomized map generated with the <a href="https://ootrandomizer.com/">Ocarina of Time Randomizer (by TestRunner et. al.)</a></p>
     </section>
     <div class="upload-spoiler">
-      <p><b>Upload your own spoiler!</b>
-      </p>
+      <h2><b>Upload your own spoiler!</b></h2>
       <form>
         <input type="file" id="spoilerUpload" accept="text/json"/>
       </form> 
+      <p></p>
+      <a href="https://wiki.ootrandomizer.com/index.php?title=Frequently_Asked_Questions#How_Do_I_Find_My_Spoiler_Log_Again.3F">Don't know where to find this? Click here!</a>
     </div>
 
     <div class="load-demo">
-      <p><b>Or, Try the demo!</b></p>
+      <p>Just want to see how the tool works?</p>
+      <h3><b>Try the demo!</b></h3>
+      <button id="loadDemoSpoiler">Try Demo!</button>
       <p>Will generate a graph using the <a href="https://github.com/MediumBob/OoT_RandomizerMappingTool/blob/main/assets/demo-spoiler.json">demo spoiler</a>.
       </p>
-      <button id="loadDemoSpoiler">Try Demo!</button>
     </div>
 
 
@@ -56,11 +68,12 @@
     </section>
   </div>
 
-  <script type="module" src="./scripts/try-demo.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> <!-- for spoiler upload - works with the form/input implementation, not the button. Also maybe used in grabbing images for the seed hash and version number-->
-  <script src="./scripts/upload-spoiler.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <!-- <script type="module" src="./scripts/try-demo.js"></script>
+  <script type="module" src="./scripts/upload-spoiler.js"></script> -->
+  <script type="module" src="./scripts/generate-map.js"></script>
   <script type="module" src="./scripts/mapper.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script src="./scripts/sidebar.js"></script>
 </body>
 
 </html>

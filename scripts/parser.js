@@ -1,4 +1,89 @@
 /**
+ * Extracts relevant data from the spoiler that the mapper needs to 
+ * generate the network graph.
+ * @param {object} spoiler - the JSON data from the spoiler file
+ * @returns 
+ */
+function Parse(entranceData){
+    // init desired variables
+    let regionIn, doorIn, regionOut, doorOut, tentativeNodeType;
+    let graphDetails = {
+        nodes: [], 
+        links: []
+    };
+
+    //enumerate through each value of the spoiler json's entrance data
+    for (const [key, value] of Object.entries(entranceData)){
+        // get the region you come from/go to, the door you walk into/out of, and note if this is an overworld or interior mapping
+        [regionIn, doorIn, regionOut, doorOut, tentativeNodeType] = ReadSpoilerEntry(key,value);
+
+        // check for exceptions before we do anything else:
+        // check for owl flights
+        if (regionIn.includes("Owl Flight")){
+            doorIn = regionIn 
+        }
+
+        // specify LW Bridge exits
+        if (regionIn === "LW Bridge"){
+            doorIn = doorIn + " (From LW Bridge)" // Lost Woods has two doors to Kokiri Forest - this makes them distinct
+        }
+
+        // determine node type
+        let nodeType = GetNodeType(regionIn, tentativeNodeType);
+        
+        // simplify the region names so we don't map redundant nodes
+        let regionInAdjusted = AdjustNodeNames(regionIn); 
+        let regionOutAdjusted = AdjustNodeNames(regionOut);
+
+        // create the edge label
+        let edgeLabel = "from [" + regionInAdjusted.toUpperCase() + "] : take [" + doorIn + "] door\nfrom [" + regionOutAdjusted.toUpperCase() + "] : take [" + doorOut + "] door";
+
+        // if the adjusted regionIn is not in the nodes array, add it
+        let existingElement = graphDetails.nodes.find(node => node.id === regionInAdjusted);
+        if (!existingElement){
+            // if this is a dungeon mapping, also include the boss (FIXME: this might cause errors if using a spoiler that didn't shuffle bosses? I think it doesn't but I haven't tested yet)
+            if (nodeType === "dungeon"){
+                graphDetails.nodes.push({id:regionInAdjusted, type:nodeType, boss:regionOut.slice(0,-10)});
+            }
+            else {
+                graphDetails.nodes.push({id:regionInAdjusted, type:nodeType});
+            }
+        }
+        // if this is an overworld mapping, add the adjusted regionOut to the nodes array (if it's not already included)
+        if (tentativeNodeType === "overworld" && nodeType != "dungeon"){
+            existingElement = graphDetails.nodes.find(node => node.id === AdjustNodeNames(regionOut));
+            if (!existingElement){
+                graphDetails.nodes.push({id:regionOutAdjusted, type:GetNodeType(regionOutAdjusted, tentativeNodeType)});
+            }
+        }
+        // if this is an interior mapping, add the raw regionOut to the nodes array (if it's not already included)
+        if (tentativeNodeType === "interior"){
+            existingElement = graphDetails.nodes.find(node => node.id === regionOut);
+            if (!existingElement){
+                graphDetails.nodes.push({id:regionOut, type:GetNodeType(regionOut, tentativeNodeType)});
+            }
+        }
+        
+        // FIXME: This is probably where we need to determine the edge properties (if it's strictly or conditionally directed, if it's an owl flight, etc)
+        if (tentativeNodeType === "interior"){
+            graphDetails.links.push({source:regionInAdjusted, target:regionOut, label:edgeLabel})
+        }
+        else if (tentativeNodeType === "overworld"){
+            if (!regionOut.includes("Boss Room")){
+                graphDetails.links.push({source:regionInAdjusted, target:regionOutAdjusted, label:edgeLabel});
+            }
+        }
+
+    }//end for loop
+    console.log("Nodes array: ");
+    console.log(graphDetails.nodes);
+    console.log("Links array: ");
+    console.log(graphDetails.links);
+    return graphDetails;
+}
+
+
+/**
  * Ensures we don't map redundant nodes (e.g. "DMC Upper Nearby" and "DMC Lower Nearby" 
  * should both map to the same "Death Mountain Crater" node in our finished graph). 
  * @param {string} region - the region to be adjusted
@@ -99,7 +184,8 @@ function GetNodeType(regionIn, tentativeNodeType){
     
     // check for specific node type based on entry details
     if (nodeType === 'overworld'){
-        if (regionIn.includes("Boss Door") || regionIn.includes("Lobby") || regionIn.includes("Beginning") || regionIn === "Ice Cavern" || regionIn === "Gerudo Training Ground"){
+        if (regionIn.includes("Boss Door") || regionIn.includes("Lobby") || regionIn.includes("Beginning") 
+        || regionIn === "Ice Cavern" || regionIn === "Gerudo Training Ground" || regionIn === "Ganons Castle"){
             nodeType = "dungeon"
         }
         // else if (doorIn.includes("Lobby") || doorIn.includes("Beginning") || doorIn.includes("Well") || (doorIn.includes("Temple") && !doorIn.includes("Time"))){
@@ -137,7 +223,7 @@ function GetNodeType(regionIn, tentativeNodeType){
  * @returns 
  */
 function ReadSpoilerEntry(key, value){
-    console.log(key, value); //debug output
+//    console.log(key, value); //debug output
     let regionIn, doorIn, regionOut, doorOut, tentativeNodeType
 
     // split the KEY in the KEY:VALUE pair from the spoiler entry (key format: "Region -> Door")
@@ -145,11 +231,9 @@ function ReadSpoilerEntry(key, value){
 
     // get the region you come from
     regionIn = split[0].trim()
-    //console.log("regionIn: " + regionIn) // debug output
 
     // get the door you walk into
     doorIn = split[1].trim()
-    //console.log("doorIn: " + doorIn) // debug output
 
     // if the VALUE in the KEY:VALUE pair from the spoiler entry is an object (dictionary), it's an overworld mapping
     if (typeof(value) === "object"){
@@ -175,121 +259,11 @@ function ReadSpoilerEntry(key, value){
     }
     // if the VALUE in the KEY:VALUE pair from the spoiler entry is neither an object or a string, we don't know what this is
     else{
+        // FIXME we should throw an error here instead of just logging a message to the console
         console.log("ERROR PARSING ENTRANCES: value( " + value + " ) must be either an object or a string, not " + typeof(value)) // debug output
     }
     return [regionIn, doorIn, regionOut, doorOut, tentativeNodeType]
 }
 
-
-/**
- * Extracts relevant data from the spoiler that the mapper needs to 
- * generate the network graph.
- * @param {object} spoiler - the JSON data from the spoiler file
- * @returns 
- */
-function Parse(spoiler){
-    console.log("inside parse");
-    // init desired variables
-    let regionIn, doorIn, regionOut, doorOut, tentativeNodeType;
-    let graphDetails = {
-        nodes: [], 
-        links: []
-    };
-
-    //enumerate through each value of the spoiler json's entrance data - for each entry:
-    for (const [key, value] of Object.entries(spoiler['entrances'])){
-        // get the region you come from/go to, the door you walk into/out of, and note if this is an overworld or interior mapping
-        [regionIn, doorIn, regionOut, doorOut, tentativeNodeType] = ReadSpoilerEntry(key,value);
-
-        // check for exceptions before we do anything else:
-        // check for owl flights
-        if (regionIn.includes("Owl Flight")){
-            doorIn = regionIn 
-        }
-
-        // specify LW Bridge exits
-        if (regionIn === "LW Bridge"){
-            doorIn = doorIn + " (From LW Bridge)" // Lost Woods has two doors to Kokiri Forest - this makes them distinct
-        }
-
-        // determine node type
-        let nodeType = GetNodeType(regionIn, tentativeNodeType);
-        
-        // simplify the region names so we don't map redundant nodes
-        let regionInAdjusted = AdjustNodeNames(regionIn); 
-        let regionOutAdjusted = AdjustNodeNames(regionOut);
-
-        // create the edge label
-        let edgeLabel = "from [" + regionInAdjusted.toUpperCase() + "] : take [" + doorIn + "] door\nfrom [" + AdjustNodeNames(regionOutAdjusted).toUpperCase() + "] : take [" + doorOut + "] door";
-        
-        console.log("RegionIn: " + regionIn)
-        console.log("RegionInAdjusted: " + regionInAdjusted)
-        console.log("regionOut: " + regionOut)
-        console.log("regionOutAdjusted: " + regionOutAdjusted)
-        console.log("nodeType: " + nodeType)
-
-        // node details will change depending on a few factors.
-        // 1. is this an overworld mapping?
-        if (tentativeNodeType === "overworld"){
-
-        }
-
-        console.log("checking graphDetails.nodes for " + regionInAdjusted)
-        // if regionInAdjusted is not in the nodes array, add it
-        let existingElement = graphDetails.nodes.find(node => node.id === regionInAdjusted);
-        if (!existingElement){
-            if (nodeType === "dungeon"){
-                graphDetails.nodes.push({id:regionInAdjusted, type:nodeType, boss:regionOut.slice(0,-10)});
-            }
-            else {
-                graphDetails.nodes.push({id:regionInAdjusted, type:nodeType});
-            }
-        }
-        // if this is an overworld mapping, add regionOutAdjusted to the nodes array (if it's not already included)
-        if (tentativeNodeType === "overworld" && nodeType != "dungeon"){
-            existingElement = graphDetails.nodes.find(node => node.id === AdjustNodeNames(regionOut));
-            if (!existingElement){
-                graphDetails.nodes.push({id:regionOutAdjusted, type:GetNodeType(regionOutAdjusted, tentativeNodeType)});
-            }
-        }
-        // if this is an interior mapping, add the raw regionOut to the nodes array (if it's not already included)
-        if (tentativeNodeType === "interior"){
-            existingElement = graphDetails.nodes.find(node => node.id === regionOut);
-            if (!existingElement){
-                graphDetails.nodes.push({id:regionOut, type:GetNodeType(regionOut, tentativeNodeType)});
-            }
-        }
-        
-
-        // if regionOut is not in the nodes array (and it's a node we want to add), add it
-        // console.log("checking graphDetails.nodes for " + AdjustNodeNames(regionOut))
-        // existingElement = graphDetails.nodes.find(node => node.id === AdjustNodeNames(regionOut));
-        // if (!(nodeType === "dungeon") && !existingElement){
-        //     graphDetails.nodes.push({id:AdjustNodeNames(regionOut), type:"skipping for now"});
-        // }
-
-        // if this is an interior mapping? OUTDATED:(if regionOut is not in the nodes array, add it (if it's not an overworld mapping))
-        // existingElement = graphDetails.nodes.find(node => node.id === regionOut)
-        // if (!existingElement && nodeType === 'interior'){
-        //     //regionOut = AdjustNodeNames(regionOut)
-        //     graphDetails.nodes.push({id:regionOut, type:nodeType});
-        //     console.log(regionOut + " not in nodes array - appending")
-        // }
-        
-        // FIXME: This is probably where we need to determine if the edge properties (if it's strictly or conditionally directed, if it's an owl flight, etc)
-        if (tentativeNodeType === "interior"){
-            graphDetails.links.push({source:regionInAdjusted, target:regionOut, label:edgeLabel})
-        }
-        else if (tentativeNodeType === "overworld"){
-            if (!regionOut.includes("Boss Room")){
-                graphDetails.links.push({source:regionInAdjusted, target:regionOutAdjusted, label:edgeLabel});
-            }
-        }
-
-    }//end for loop
-    console.log(graphDetails.nodes);
-    console.log(graphDetails.links);
-    return graphDetails;
-}
 
 export { AdjustNodeNames, GetNodeType, ReadSpoilerEntry, Parse };

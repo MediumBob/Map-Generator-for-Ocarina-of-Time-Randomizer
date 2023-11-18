@@ -1,4 +1,10 @@
 function GenerateGraph(data){
+    // clear the window
+    let map = document.getElementById("map-window");
+    while (map.firstChild){                 // while the map still elements in it
+        map.removeChild(map.firstChild);    // remove the first element
+    }
+
     // specify zoom functionality
     function zoomed({transform}) {
         node.attr("transform", transform);
@@ -14,22 +20,71 @@ function GenerateGraph(data){
     const height = 680;
 
     // Specify the color scale.
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const color = d3.scaleOrdinal()
+    .domain(["overworld", "interior", "spawn", "dungeon", "song", "grotto", "grave", "great fairy fountain"])
+    .range(["#e39400", "#00aaff", "#4dff00", "#ff0000", "#9e00ff", "#9d5a00", "#b2b2b2", "#ff00dc"]);
+    //      [orange,    blue,     green,      red,      purple,     brown,      gray,       pink]
 
     // The force simulation mutates links and nodes, so create a copy
     // so that re-evaluating this cell produces the same result.
     const links = data.links.map(d => ({...d}));
     const nodes = data.nodes.map(d => ({...d}));
 
-    // debug output
-    console.log(Object.entries(nodes))
+
+    // strength
+    function typeStrength(type){
+        if (type === 'overworld'){
+            console.log("type: " + type + ". returning 0")
+            return -100;
+        }
+        else if (type === 'interior'){
+            console.log("type: " + type + ". returning -50")
+            return -40;
+        }
+        else if (type === 'grotto' || type === 'grave' || type === 'great fairy fountain'){
+            console.log("type: " + type + ". returning -10")
+            return -20;
+        }
+        else if (type === 'song'){
+            console.log("type: " + type + ". returning -100")
+            return -10;
+        }
+        else{
+            console.log("type: " + type + ". returning -30")
+            return -30;
+        }
+    }
 
     // Create a simulation with several forces.
     const simulation = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id))
-        .force("charge", d3.forceManyBody().strength(d => d.nodeType === 'interior' ? -50 : -90))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY());
+    .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+        if (d.source.type === 'overworld' && (d.target.type === 'grotto' || d.target.type === 'grave')) {
+          return 30; // Adjust the distance value to control the spacing between overworld and grotto/grave nodes
+        } else if ((d.source.type === 'grotto' || d.source.type === 'grave') && d.target.type === 'interior') {
+          return 90; // Adjust the distance value to control the spacing between grotto/grave and interior nodes
+        } else {
+          return 30; // Default distance value for other links
+        }
+      }))
+        .force("charge", d3.forceManyBody().strength(d => typeStrength(d.type)))
+        //.force("center", d3.forceCenter());
+          .force("x", d3.forceX())
+          .force("y", d3.forceY());
+
+        // .force("x", d3.forceX().strength(d => {
+        //     if (d.type === 'overworld') {
+        //       return 0.1; // Adjust the strength value to control the spacing between shells
+        //     } else {
+        //       return 0; // No force on non-overworld nodes
+        //     }
+        //   }))
+        //   .force("y", d3.forceY().strength(d => {
+        //     if (d.type === 'overworld') {
+        //       return 0.1; // Adjust the strength value to control the spacing between shells
+        //     } else {
+        //       return 0; // No force on non-overworld nodes
+        //     }
+        //   }));
 
     // Create the SVG container.
     const svg = d3.create("svg")
@@ -108,7 +163,6 @@ function GenerateGraph(data){
         event.subject.fy = event.y;
     }
 
-
     // Restore the target alpha so the simulation cools after dragging ends.
     // Unfix the subject position now that it’s no longer being dragged.
     function dragended(event) {
@@ -116,11 +170,6 @@ function GenerateGraph(data){
         event.subject.fx = null;
         event.subject.fy = null;
     }
-
-    // When this cell is re-run, stop the previous simulation. (This doesn’t
-    // really matter since the target alpha is zero and the simulation will
-    // stop naturally, but it’s a good practice.)
-    //invalidation.then(() => simulation.stop());
 
     return svg.node();
 }
